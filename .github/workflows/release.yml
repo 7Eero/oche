@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js PWA
+        run: npm run build
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Sync Android assets
+        run: npx cap sync android
+
+      - name: Build Android APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+          mkdir -p ../release-artifacts
+          cp app/build/outputs/apk/debug/app-debug.apk ../release-artifacts/oche-${{ github.ref_name }}.apk
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Oche ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: release-artifacts/*.apk
+          generate_release_notes: true
+          body: |
+            ### 🎯 Oche ${{ github.ref_name }}
+            
+            Welcome to the official release of **Oche** — 501 Darts Training & Scoring App!
+            
+            #### 📦 Download
+            - **Android APK**: Download `oche-${{ github.ref_name }}.apk` below to install natively on any Android phone or tablet.
+            
+            #### ✨ Highlights
+            - **501 Double Out Scoring**: Complete official game rules, dart-by-dart input, turn summary, and automatic bust detection.
+            - **Singleplayer Training**: Solo 501 practice mode tracking legs, darts thrown, and personal bests.
+            - **Multiplayer Match**: Score keeping for 2+ players with turn indicators and live score calculations.
+            - **Smart Checkout Suggestions**: Dynamic 1-3 dart checkout routes when score is ≤ 170.
+            - **Offline-First Database**: Powered by IndexedDB (Dexie.js) to store game logs, turn details, and career stats.
+            - **PWA Ready**: Works offline on iOS & Android browsers.
