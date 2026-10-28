@@ -1,10 +1,11 @@
-# 🎯 Oche — 501 Darts Tracker
+# 🎯 Oche — 501 & 301 Darts Tracker
 
-A modern, offline-first darts scoring and training application for 501 double-out matches and solo practice. Built with Next.js, IndexedDB, Tailwind CSS, PWA, and Capacitor Android.
+A modern, offline-first darts scoring and training application for 501 and 301 double-out matches and solo practice. Built with Next.js, IndexedDB, Tailwind CSS, PWA, and Capacitor Android.
 
 ## Features
 
-- **501 Double Out** — Full game rules with bust detection and double-finish requirement
+- **501 & 301 Double Out** — Official game rules with bust detection and double-finish requirement
+- **Game Format Switcher** — Seamlessly toggle between fast 301 legs or traditional 501 games
 - **Multi-player** — Add 2+ players with individual score tracking
 - **Dart-by-dart input** — Log each dart (single/double/triple × 1-20, bull, double-bull) or use quick turn total entry
 - **Checkout suggestions** — Shows possible finishes when remaining score is ≤ 170

@@ -119,7 +119,7 @@ export function MatchDetails({ gameId, onBack }: MatchDetailsProps) {
         <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-400">
           <span>{game.totalTurns} Total Turns</span>
           <span>•</span>
-          <span>501 Double Out</span>
+          <span>{game.startingScore || 501} Double Out</span>
         </div>
       </div>
 

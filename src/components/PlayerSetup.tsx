@@ -12,6 +12,8 @@ export function PlayerSetup() {
   const [showHistory, setShowHistory] = useState(false);
 
   const setupPlayers = useGameStore((s) => s.setupPlayers);
+  const targetStartingScore = useGameStore((s) => s.targetStartingScore);
+  const setTargetStartingScore = useGameStore((s) => s.setTargetStartingScore);
   const addPlayer = useGameStore((s) => s.addPlayer);
   const removePlayer = useGameStore((s) => s.removePlayer);
   const startGame = useGameStore((s) => s.startGame);
@@ -60,11 +62,42 @@ export function PlayerSetup() {
           </h1>
           <div className="w-3 h-3 rounded-full bg-accent shadow-lg shadow-accent/50" />
         </div>
-        <p className="text-gray-400 font-medium">501 Double Out Training</p>
+        <p className="text-gray-400 font-medium">
+          {targetStartingScore} Double Out Training
+        </p>
       </div>
 
       {/* In-app Install Prompt */}
       <InstallPrompt />
+
+      {/* Target Score Selector: 501 / 301 */}
+      <div className="flex items-center justify-between w-full mb-3 p-2 bg-surface-800/80 rounded-xl border border-white/5 animate-slide-up">
+        <span className="text-xs font-semibold text-gray-300 uppercase tracking-wider pl-2">
+          Game Format
+        </span>
+        <div className="flex gap-1 bg-surface-900/90 p-1 rounded-lg border border-white/5">
+          <button
+            onClick={() => setTargetStartingScore(501)}
+            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${
+              targetStartingScore === 501
+                ? "bg-primary-500 text-white shadow-md shadow-primary-500/25"
+                : "text-gray-400 hover:text-white"
+            }`}
+          >
+            501
+          </button>
+          <button
+            onClick={() => setTargetStartingScore(301)}
+            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${
+              targetStartingScore === 301
+                ? "bg-primary-500 text-white shadow-md shadow-primary-500/25"
+                : "text-gray-400 hover:text-white"
+            }`}
+          >
+            301
+          </button>
+        </div>
+      </div>
 
       {/* Mode Selector */}
       <div className="grid grid-cols-2 gap-2 w-full mb-4 p-1 bg-surface-800/80 rounded-2xl border border-white/5 animate-slide-up">
@@ -100,7 +133,7 @@ export function PlayerSetup() {
             <div className="mb-5">
               <h2 className="text-xl font-bold text-white mb-1">Solo Training</h2>
               <p className="text-xs text-gray-400">
-                Track your 3-dart average, checkout percentage, and high turns as you practice 501.
+                Track your 3-dart average, checkout percentage, and high turns as you practice {targetStartingScore}.
               </p>
             </div>
 
@@ -125,7 +158,7 @@ export function PlayerSetup() {
               className="btn-primary w-full text-lg py-4 flex items-center justify-center gap-2"
             >
               <span>🎯</span>
-              <span>Start Solo 501</span>
+              <span>Start Solo {targetStartingScore}</span>
             </button>
           </div>
         ) : (
@@ -134,7 +167,7 @@ export function PlayerSetup() {
             <div className="mb-4">
               <h2 className="text-xl font-bold text-white mb-1">Multiplayer Match</h2>
               <p className="text-xs text-gray-400">
-                Add 2 or more players to compete in 501 double-out.
+                Add 2 or more players to compete in {targetStartingScore} double-out.
               </p>
             </div>
 
@@ -216,7 +249,7 @@ export function PlayerSetup() {
             >
               {setupPlayers.length < 2
                 ? `Need ${2 - setupPlayers.length} more player${setupPlayers.length === 0 ? "s" : ""}`
-                : `Start Match (${setupPlayers.length} players)`}
+                : `Start Match (${setupPlayers.length} players • ${targetStartingScore})`}
             </button>
           </div>
         )}

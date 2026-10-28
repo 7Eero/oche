@@ -120,6 +120,9 @@ export function GameHistory({ onBack }: GameHistoryProps) {
                       <span className="font-semibold text-gold-light group-hover:text-primary-300 transition-colors">
                         {game.winner}
                       </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-surface-800 text-gray-300 border border-white/5">
+                        {game.startingScore || 501}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500">

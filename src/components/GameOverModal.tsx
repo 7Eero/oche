@@ -11,12 +11,14 @@ export function GameOverModal() {
   const winnerId = useGameStore((s) => s.winnerId);
   const resetGame = useGameStore((s) => s.resetGame);
   const setupPlayers = useGameStore((s) => s.setupPlayers);
+  const startingScore = useGameStore((s) => s.startingScore) || 501;
 
   const winner = players.find((p) => p.id === winnerId);
 
   const handleRematch = () => {
     // Keep same players, start new game
     const store = useGameStore.getState();
+    const currentScore = store.startingScore || 501;
     const playerNames = store.players.map((p) => ({
       id: p.id,
       name: p.name,
@@ -24,6 +26,7 @@ export function GameOverModal() {
 
     useGameStore.setState({
       id: "",
+      startingScore: currentScore,
       players: [],
       currentPlayerIndex: 0,
       currentTurnDarts: [],
@@ -37,7 +40,7 @@ export function GameOverModal() {
 
     // Then immediately start
     setTimeout(() => {
-      useGameStore.getState().startGame();
+      useGameStore.getState().startGame(currentScore);
     }, 50);
   };
 

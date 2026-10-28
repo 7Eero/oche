@@ -14,11 +14,11 @@ function generateId(): string {
   return Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
 }
 
-function createPlayer(name: string): Player {
+function createPlayer(name: string, startingScore = 501): Player {
   return {
     id: generateId(),
     name,
-    remaining: STARTING_SCORE,
+    remaining: startingScore,
     turns: [],
     dartsThrown: 0,
     average: 0,
@@ -46,12 +46,16 @@ function isOnCheckoutScore(remaining: number): boolean {
 }
 
 interface GameStore extends GameState {
+  // Target score
+  targetStartingScore: number;
+  setTargetStartingScore: (score: number) => void;
+
   // Setup actions
   setupPlayers: { id: string; name: string }[];
   addPlayer: (name: string) => void;
   removePlayer: (id: string) => void;
-  startGame: () => void;
-  startSoloGame: (name?: string) => void;
+  startGame: (overrideScore?: number) => void;
+  startSoloGame: (name?: string, overrideScore?: number) => void;
   resetGame: () => void;
 
   // Game actions
@@ -74,6 +78,8 @@ interface GameStore extends GameState {
 export const useGameStore = create<GameStore>((set, get) => ({
   // Initial state
   id: "",
+  startingScore: 501,
+  targetStartingScore: 501,
   players: [],
   currentPlayerIndex: 0,
   currentTurnDarts: [],
@@ -84,6 +90,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   finishedAt: null,
   setupPlayers: [],
   gameHistory: [],
+
+  setTargetStartingScore: (score: number) => {
+    set({ targetStartingScore: score });
+  },
 
   // Setup actions
   addPlayer: (name: string) => {
@@ -103,14 +113,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
-  startGame: () => {
-    const { setupPlayers } = get();
+  startGame: (overrideScore?: number) => {
+    const { setupPlayers, targetStartingScore } = get();
     if (setupPlayers.length < 1) return;
 
-    const players = setupPlayers.map((sp) => createPlayer(sp.name));
+    const score = overrideScore || targetStartingScore || 501;
+    const players = setupPlayers.map((sp) => createPlayer(sp.name, score));
 
     set({
       id: generateId(),
+      startingScore: score,
       players,
       currentPlayerIndex: 0,
       currentTurnDarts: [],
@@ -122,11 +134,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  startSoloGame: (playerName?: string) => {
+  startSoloGame: (playerName?: string, overrideScore?: number) => {
+    const { targetStartingScore } = get();
+    const score = overrideScore || targetStartingScore || 501;
     const name = playerName?.trim() || "Solo Player";
-    const player = createPlayer(name);
+    const player = createPlayer(name, score);
     set({
       id: generateId(),
+      startingScore: score,
       players: [player],
       currentPlayerIndex: 0,
       currentTurnDarts: [],
@@ -142,6 +157,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   resetGame: () => {
     set({
       id: "",
+      startingScore: get().targetStartingScore || 501,
       players: [],
       currentPlayerIndex: 0,
       currentTurnDarts: [],
@@ -249,6 +265,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // Save to history
       const historyEntry: GameHistory = {
         id: state.id,
+        startingScore: state.startingScore || 501,
         players: updatedPlayers.map((p) => ({
           name: p.name,
           finalScore: p.remaining,
@@ -268,7 +285,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         updatedPlayers,
         updatedPlayer,
         state.startedAt,
-        finishedAt
+        finishedAt,
+        state.startingScore || 501
       ).catch(() => {
         // Ignore DB errors
       });
@@ -375,6 +393,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const finishedAt = new Date().toISOString();
       const historyEntry: GameHistory = {
         id: state.id,
+        startingScore: state.startingScore || 501,
         players: updatedPlayers.map((p) => ({
           name: p.name,
           finalScore: p.remaining,
@@ -394,7 +413,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         updatedPlayers,
         updatedPlayer,
         state.startedAt,
-        finishedAt
+        finishedAt,
+        state.startingScore || 501
       ).catch(() => {
         // Ignore DB errors
       });

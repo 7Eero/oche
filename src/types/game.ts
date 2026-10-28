@@ -29,6 +29,7 @@ export interface Player {
 
 export interface GameState {
   id: string;
+  startingScore: number;
   players: Player[];
   currentPlayerIndex: number;
   currentTurnDarts: Dart[];
@@ -41,6 +42,7 @@ export interface GameState {
 
 export interface GameHistory {
   id: string;
+  startingScore?: number;
   players: { name: string; finalScore: number; average: number }[];
   winner: string;
   date: string;

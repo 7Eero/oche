@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Dart } from "@/types/game";
 
 export function GameBoard() {
+  const startingScore = useGameStore((s) => s.startingScore) || 501;
   const players = useGameStore((s) => s.players);
   const currentPlayerIndex = useGameStore((s) => s.currentPlayerIndex);
   const currentTurnDarts = useGameStore((s) => s.currentTurnDarts);
@@ -55,7 +56,9 @@ export function GameBoard() {
           ← Exit
         </button>
         <h1 className="text-sm font-semibold text-gray-400">
-          {players.length === 1 ? "501 Solo Training" : "501 Double Out"}
+          {players.length === 1
+            ? `${startingScore} Solo Training`
+            : `${startingScore} Double Out`}
         </h1>
         <button
           onClick={() => setShowHistory(!showHistory)}

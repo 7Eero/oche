@@ -4,6 +4,7 @@ import { GameHistory, Player, Dart, Turn } from '@/types/game';
 // Extended types for database storage
 export interface DBGame {
   id: string;
+  startingScore?: number;
   winner: string;
   date: string;
   totalTurns: number;
@@ -76,7 +77,8 @@ export async function saveGameToDb(
   players: Player[],
   winner: Player,
   startedAt: string,
-  finishedAt: string
+  finishedAt: string,
+  startingScore = 501
 ): Promise<void> {
   const totalTurns = players.reduce((sum, p) => sum + p.turns.length, 0);
 
@@ -84,6 +86,7 @@ export async function saveGameToDb(
     // Save game record
     await db.games.put({
       id: gameId,
+      startingScore,
       winner: winner.name,
       date: finishedAt,
       totalTurns,
@@ -174,6 +177,7 @@ export async function loadGameHistory(): Promise<GameHistory[]> {
 
     history.push({
       id: game.id,
+      startingScore: game.startingScore || 501,
       players: playerResults.map((pr) => ({
         name: pr.playerName,
         finalScore: pr.finalScore,
