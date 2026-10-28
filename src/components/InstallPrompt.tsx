@@ -54,7 +54,7 @@ export function InstallPrompt() {
         <div className="flex items-center gap-3">
           <span className="text-2xl">📱</span>
           <div>
-            <p className="text-sm font-bold text-white">Install Darts Tracker</p>
+            <p className="text-sm font-bold text-white">Install Oche</p>
             <p className="text-xs text-gray-400">Play offline anytime on your home screen</p>
           </div>
         </div>

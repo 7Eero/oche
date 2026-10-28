@@ -1,6 +1,6 @@
-# 🎯 Darts Tracker — 501 Double Out
+# 🎯 Oche — 501 Darts Tracker
 
-A mobile-first darts scoring application for tracking 501 double-out games with multiple players.
+A modern, offline-first darts scoring and training application for 501 double-out matches and solo practice. Built with Next.js, IndexedDB, Tailwind CSS, PWA, and Capacitor Android.
 
 ## Features
 

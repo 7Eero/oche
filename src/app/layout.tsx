@@ -5,14 +5,14 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Darts Tracker - 501 Double Out",
+  title: "Oche - 501 Darts Tracker",
   description:
     "Track your 501 double-out darts games with multi-player support, checkout suggestions, and game statistics.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Darts Tracker",
+    title: "Oche",
   },
   icons: {
     icon: "/icons/icon-192.png",

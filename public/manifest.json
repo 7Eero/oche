@@ -1,6 +1,6 @@
 {
-  "name": "Darts Tracker",
-  "short_name": "Darts",
+  "name": "Oche - 501 Darts Tracker",
+  "short_name": "Oche",
   "description": "Track your 501 double-out darts games with multi-player support, checkout suggestions, and game statistics.",
   "start_url": "/",
   "display": "standalone",

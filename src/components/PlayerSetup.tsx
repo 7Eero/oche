@@ -56,7 +56,7 @@ export function PlayerSetup() {
         <div className="flex items-center justify-center gap-3 mb-2">
           <div className="w-3 h-3 rounded-full bg-primary-500 shadow-lg shadow-primary-500/50" />
           <h1 className="text-4xl font-extrabold text-white tracking-tight">
-            Darts Tracker
+            Oche
           </h1>
           <div className="w-3 h-3 rounded-full bg-accent shadow-lg shadow-accent/50" />
         </div>
