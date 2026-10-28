@@ -35,12 +35,29 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser (works great on mobile too!).
 
-### Build for Production
+## Build for Production
+
+### Web / Static PWA
 
 ```bash
 npm run build
-npm start
+npm run serve    # Preview pre-built PWA locally
 ```
+
+### Android APK
+
+Your development environment automatically includes Java 21, the Android SDK, and build-tools via Nix flakes.
+
+To compile a native Android APK:
+
+```bash
+npm run build:apk
+```
+
+The compiled APK will be generated at:
+`dist/darts-tracker.apk` (and `android/app/build/outputs/apk/debug/app-debug.apk`)
+
+You can transfer this APK directly to your Android device via USB, email, or local network to install and run natively!
 
 ## Tech Stack
 
