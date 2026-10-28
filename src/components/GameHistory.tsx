@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useGameStore } from "@/store/gameStore";
 import { getAllPlayerStats, DBPlayerStats } from "@/lib/db";
+import { MatchDetails } from "@/components/MatchDetails";
 
 interface GameHistoryProps {
   onBack: () => void;
@@ -16,6 +17,7 @@ export function GameHistory({ onBack }: GameHistoryProps) {
   const [activeTab, setActiveTab] = useState<"games" | "stats">("games");
   const [playerStats, setPlayerStats] = useState<DBPlayerStats[]>([]);
   const [loadingStats, setLoadingStats] = useState(false);
+  const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
 
   useEffect(() => {
     loadHistory();
@@ -38,8 +40,18 @@ export function GameHistory({ onBack }: GameHistoryProps) {
     if (confirm("Are you sure you want to clear all game history and player stats?")) {
       clearHistory();
       setPlayerStats([]);
+      setSelectedGameId(null);
     }
   };
+
+  if (selectedGameId) {
+    return (
+      <MatchDetails
+        gameId={selectedGameId}
+        onBack={() => setSelectedGameId(null)}
+      />
+    );
+  }
 
   return (
     <div className="min-h-dvh flex flex-col px-4 py-6 max-w-2xl mx-auto w-full">
@@ -93,25 +105,38 @@ export function GameHistory({ onBack }: GameHistoryProps) {
         ) : (
           <>
             <div className="space-y-3 flex-1 overflow-y-auto">
+              <p className="text-xs text-gray-400 mb-2 px-1">
+                Tap any match to view full stats and turn-by-turn point history:
+              </p>
               {gameHistory.map((game) => (
-                <div key={game.id} className="glass-card p-4">
+                <div
+                  key={game.id}
+                  onClick={() => setSelectedGameId(game.id)}
+                  className="glass-card p-4 hover:border-primary-500/40 cursor-pointer transition-all active:scale-[0.99] group"
+                >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">🏆</span>
-                      <span className="font-semibold text-gold-light">
+                      <span className="font-semibold text-gold-light group-hover:text-primary-300 transition-colors">
                         {game.winner}
                       </span>
                     </div>
-                    <span className="text-xs text-gray-500">
-                      {new Date(game.date).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500">
+                        {new Date(game.date).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                      <span className="text-xs text-primary-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Details →
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex gap-2 flex-wrap">
+
+                  <div className="flex gap-2 flex-wrap mb-3">
                     {game.players.map((player, i) => (
                       <div
                         key={i}
@@ -121,14 +146,18 @@ export function GameHistory({ onBack }: GameHistoryProps) {
                             : "bg-white/5 border-white/5 text-gray-300"
                         }`}
                       >
-                        {player.name}: {player.finalScore === 0 ? "Won!" : `${player.finalScore} left`} (avg{" "}
+                        {player.name}: {player.finalScore === 0 ? "Won" : `${player.finalScore} left`} (avg{" "}
                         {player.average.toFixed(1)})
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {game.totalTurns} total turns
-                  </p>
+
+                  <div className="flex items-center justify-between text-[11px] text-gray-500 border-t border-white/5 pt-2">
+                    <span>{game.totalTurns} turns</span>
+                    <span className="text-primary-400/90 font-medium group-hover:underline">
+                      View Points & Darts Breakdown
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -144,7 +173,12 @@ export function GameHistory({ onBack }: GameHistoryProps) {
       ) : (
         /* Player Lifetime Stats */
         <div className="flex-1">
-          {playerStats.length === 0 ? (
+          {loadingStats ? (
+            <div className="text-center text-gray-400 py-12">
+              <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <p className="text-xs">Loading player records...</p>
+            </div>
+          ) : playerStats.length === 0 ? (
             <div className="text-center text-gray-500 py-12">
               <p className="text-lg font-medium">No player records yet</p>
               <p className="text-sm mt-1">Play a full game to track lifetime averages and checkout %</p>

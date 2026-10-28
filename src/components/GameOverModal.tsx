@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { useGameStore } from "@/store/gameStore";
+import { MatchDetails } from "@/components/MatchDetails";
 
 export function GameOverModal() {
+  const [showDetails, setShowDetails] = useState(false);
+  const gameId = useGameStore((s) => s.id);
   const players = useGameStore((s) => s.players);
   const winnerId = useGameStore((s) => s.winnerId);
   const resetGame = useGameStore((s) => s.resetGame);
@@ -36,6 +40,14 @@ export function GameOverModal() {
       useGameStore.getState().startGame();
     }, 50);
   };
+
+  if (showDetails && gameId) {
+    return (
+      <div className="fixed inset-0 bg-surface-900 z-50 overflow-y-auto">
+        <MatchDetails gameId={gameId} onBack={() => setShowDetails(false)} />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
@@ -142,13 +154,23 @@ export function GameOverModal() {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3">
-          <button onClick={resetGame} className="btn-secondary flex-1">
-            New Game
-          </button>
-          <button onClick={handleRematch} className="btn-primary flex-1">
-            {players.length === 1 ? "Practice Again" : "Rematch"}
-          </button>
+        <div className="space-y-2">
+          <div className="flex gap-3">
+            <button onClick={resetGame} className="btn-secondary flex-1">
+              New Game
+            </button>
+            <button onClick={handleRematch} className="btn-primary flex-1">
+              {players.length === 1 ? "Practice Again" : "Rematch"}
+            </button>
+          </div>
+          {gameId && (
+            <button
+              onClick={() => setShowDetails(true)}
+              className="btn-ghost w-full !py-2 text-xs text-primary-300 hover:text-white border border-primary-500/20"
+            >
+              📊 View Point History & Match Stats
+            </button>
+          )}
         </div>
       </div>
     </div>
