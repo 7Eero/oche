@@ -7,9 +7,13 @@
     "build": "next build",
     "start": "next start",
     "serve": "npx -y serve out",
+    "build:apk": "npm run build && npx cap sync android && (cd android && ./gradlew assembleDebug) && cp android/app/build/outputs/apk/debug/app-debug.apk dist/darts-tracker.apk",
     "lint": "next lint"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
     "@ducanh2912/next-pwa": "^10.2.9",
     "dexie": "^4.4.7",
     "next": "14.2.5",

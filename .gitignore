@@ -49,5 +49,13 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
+# Android
+.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/.gradle/
+android/capacitor-cordova-android-plugins/build/
+
 # Misc
 *.pem
