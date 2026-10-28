@@ -14,7 +14,7 @@ export function Scoreboard() {
           return (
             <div
               key={player.id}
-              className={`flex-shrink-0 rounded-xl p-3 min-w-[120px] transition-all duration-300 ${
+              className={`flex-shrink-0 rounded-xl p-3 min-w-[120px] h-[86px] transition-all duration-300 ${
                 isCurrent
                   ? "glass-card-accent animate-pulse-glow"
                   : "glass-card opacity-70"
@@ -33,7 +33,7 @@ export function Scoreboard() {
                 </p>
               </div>
               <p
-                className={`text-2xl font-bold ${
+                className={`text-2xl font-bold leading-tight ${
                   isCurrent
                     ? "text-white text-shadow-glow"
                     : "text-gray-300"
@@ -41,13 +41,17 @@ export function Scoreboard() {
               >
                 {player.remaining}
               </p>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-2 mt-1 h-3.5">
                 <span className="text-[10px] text-gray-500">
                   Avg: {player.average.toFixed(1)}
                 </span>
-                {player.highestTurn > 0 && (
-                  <span className="text-[10px] text-gold-light">
+                {player.highestTurn > 0 ? (
+                  <span className="text-[10px] text-gold-light font-medium">
                     ↑{player.highestTurn}
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-transparent select-none">
+                    ↑0
                   </span>
                 )}
               </div>
