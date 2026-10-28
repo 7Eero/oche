@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useGameStore } from "@/store/gameStore";
 import { GameHistory } from "@/components/GameHistory";
+import { InstallPrompt } from "@/components/InstallPrompt";
 
 export function PlayerSetup() {
   const [mode, setMode] = useState<"single" | "multi">("single");
@@ -61,6 +62,9 @@ export function PlayerSetup() {
         </div>
         <p className="text-gray-400 font-medium">501 Double Out Training</p>
       </div>
+
+      {/* In-app Install Prompt */}
+      <InstallPrompt />
 
       {/* Mode Selector */}
       <div className="grid grid-cols-2 gap-2 w-full mb-4 p-1 bg-surface-800/80 rounded-2xl border border-white/5 animate-slide-up">
