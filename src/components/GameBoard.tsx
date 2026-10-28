@@ -54,7 +54,9 @@ export function GameBoard() {
         <button onClick={resetGame} className="btn-ghost !px-2 !py-1 text-xs">
           ← Exit
         </button>
-        <h1 className="text-sm font-semibold text-gray-400">501 Double Out</h1>
+        <h1 className="text-sm font-semibold text-gray-400">
+          {players.length === 1 ? "501 Solo Training" : "501 Double Out"}
+        </h1>
         <button
           onClick={() => setShowHistory(!showHistory)}
           className="btn-ghost !px-2 !py-1 text-xs"
@@ -78,7 +80,9 @@ export function GameBoard() {
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <p className="text-xs text-gray-400 uppercase tracking-wider">
-                    {currentPlayer.name}&apos;s Turn
+                    {players.length === 1
+                      ? `${currentPlayer.name} • Turn ${currentPlayer.turns.length + 1}`
+                      : `${currentPlayer.name}'s Turn`}
                   </p>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-white">
@@ -141,7 +145,7 @@ export function GameBoard() {
                       onClick={nextPlayer}
                       className="btn-primary flex-1 !py-2 text-sm animate-scale-in"
                     >
-                      Next Player →
+                      {players.length === 1 ? "Next Turn →" : "Next Player →"}
                     </button>
                   )}
                 </div>

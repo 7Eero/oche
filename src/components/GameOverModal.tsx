@@ -50,11 +50,20 @@ export function GameOverModal() {
         {/* Winner Announcement */}
         <div className="text-center mb-6">
           <div className="text-5xl mb-3">🎯</div>
-          <h2 className="text-3xl font-bold text-white mb-1">Game Over!</h2>
+          <h2 className="text-3xl font-bold text-white mb-1">
+            {players.length === 1 ? "Leg Checked Out!" : "Game Over!"}
+          </h2>
           {winner && (
-            <p className="text-xl text-gold-light font-semibold text-shadow-gold">
-              🏆 {winner.name} wins!
-            </p>
+            <div>
+              <p className="text-xl text-gold-light font-semibold text-shadow-gold">
+                {players.length === 1 ? `🎉 ${winner.name}` : `🏆 ${winner.name} wins!`}
+              </p>
+              {players.length === 1 && (
+                <p className="text-sm text-gray-300 mt-1">
+                  Finished in <span className="text-primary-400 font-bold">{winner.dartsThrown} darts</span> ({winner.turns.length} turns)
+                </p>
+              )}
+            </div>
           )}
         </div>
 
@@ -138,7 +147,7 @@ export function GameOverModal() {
             New Game
           </button>
           <button onClick={handleRematch} className="btn-primary flex-1">
-            Rematch
+            {players.length === 1 ? "Practice Again" : "Rematch"}
           </button>
         </div>
       </div>

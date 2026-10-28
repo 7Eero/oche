@@ -51,6 +51,7 @@ interface GameStore extends GameState {
   addPlayer: (name: string) => void;
   removePlayer: (id: string) => void;
   startGame: () => void;
+  startSoloGame: (name?: string) => void;
   resetGame: () => void;
 
   // Game actions
@@ -104,7 +105,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   startGame: () => {
     const { setupPlayers } = get();
-    if (setupPlayers.length < 2) return;
+    if (setupPlayers.length < 1) return;
 
     const players = setupPlayers.map((sp) => createPlayer(sp.name));
 
@@ -118,6 +119,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
       winnerId: null,
       startedAt: new Date().toISOString(),
       finishedAt: null,
+    });
+  },
+
+  startSoloGame: (playerName?: string) => {
+    const name = playerName?.trim() || "Solo Player";
+    const player = createPlayer(name);
+    set({
+      id: generateId(),
+      players: [player],
+      currentPlayerIndex: 0,
+      currentTurnDarts: [],
+      gameStarted: true,
+      gameFinished: false,
+      winnerId: null,
+      startedAt: new Date().toISOString(),
+      finishedAt: null,
+      setupPlayers: [{ id: player.id, name }],
     });
   },
 
